@@ -188,5 +188,5 @@ $RECYCLE.BIN/
 
 # additional files
 feature-plan.md
-.freebuff
+.freebuff/
 # End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,node
