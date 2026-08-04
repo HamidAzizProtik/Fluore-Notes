@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluore</title>
+
+    <meta name="google-site-verification" content="DSH0HZp0ZJgHmGOEcTpcjYUxs8lS-x4-sncp4mgwa3U" />
+
+    <script
+    src="https://js.sentry-cdn.com/c8f91f87a39161efba118c9aa3c41ac3.min.js"
+    crossorigin="anonymous"
+    ></script>
+
+    <script>
+    Sentry.onLoad(function() {
+        Sentry.init({
+        // Tracing
+        tracesSampleRate: 1.0, // Capture 100% of the transactions
+        });
+    });
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Fluore Notes</h1>
+
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search...">
+
+        <div class="header-actions">
+            <button class="add-note-btn" onclick="openNoteDialog()">+ Add Note</button> <!-- also calling a function -->
+            <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+        </div>
+    </header>
+    <main id="notesContainer" class="notes-grid">
+
+    </main>
+    <dialog id="noteDialog">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <h2 class="dialog-title" id="dialogTitle">Add New Note</h2>
+                <button class="close-btn" onclick="closeNoteDialog()">x</button> <!-- calling javascript function -->
+            </div>
+
+            <form id="noteForm">
+                <div class="form-group">
+                    <label for="noteTitle" class="form-label">Title</label>
+                    <input type="text" id="noteTitle" class="form-input" placeholder="Enter Note Title..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="noteContent" class="form-label">Content</label>
+                    <textarea id="noteContent" class="form-textarea" placeholder="Write your note here..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <select id="noteColor" class="form-input">
+                        <option value="">🎨 Default</option>
+                        <option value="#FF3B30">🔴 Dusty Rose</option>
+                        <option value="#FF9500">🟠 Warm Peach</option>
+                        <option value="#FFCC00">🟡 Butter Cream</option>
+                        <option value="#34C759">🟢 Sage Green</option>
+                        <option value="#007AFF">🔵 Ice Cyan</option>
+                        <option value="#AF52DE">🟣 Muted Lavender</option>
+                        <option value="#FFFFFF">⚪ Soft Slate Gray</option>
+                    </select>
+                </div>
+
+                <div class="dialog-actions">
+                    <button type="button" class="cancel-btn" onclick="closeNoteDialog()">Cancel</button>
+                    <button type="submit" class="save-btn">Save Note</button>
+                </div>
+
+            </form>
+        </div>
+
+    </dialog>
+</body>
+</html> 
