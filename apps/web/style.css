@@ -367,3 +367,19 @@ dialog::backdrop {
 .note-card[style*="background-color:#"] .note-content {
   color: #524336;
 }
+
+/* Auth Loading Spinner */
+.auth-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--surface-color);
+    border-top: 3px solid var(--brand-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
