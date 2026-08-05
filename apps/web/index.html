@@ -8,27 +8,34 @@
     <meta name="google-site-verification" content="DSH0HZp0ZJgHmGOEcTpcjYUxs8lS-x4-sncp4mgwa3U" />
 
     <script
-            async
-            crossorigin="anonymous"
-            src="https://cdn.jsdelivr.net/npm/@clerk/ui@latest/dist/ui.browser.js"
-            type="text/javascript"
-        ></script>
-
-        <script
-            async
-            crossorigin="anonymous"
-            data-clerk-publishable-key="pk_test_ZmFzdC1zd2FuLTg2LmNsZXJrLmFjY291bnRzLmRldiQ"
-            src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
-            type="text/javascript"
-        ></script>
+        src="https://js.sentry-cdn.com/c8f91f87a39161efba118c9aa3c41ac3.min.js"
+        crossorigin="anonymous"
+    ></script>
 
     <script>
-        Sentry.onLoad(function() {
-            Sentry.init({
-                tracesSampleRate: 1.0,
-            });
+        window.addEventListener('load', () => {
+            if (typeof Sentry !== 'undefined') {
+                Sentry.init({
+                    tracesSampleRate: 1.0,
+                });
+            }
         });
     </script>
+
+    <script
+        async
+        crossorigin="anonymous"
+        src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/ui@latest/dist/ui.browser.js"
+        type="text/javascript"
+    ></script>
+
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZmFzdC1zd2FuLTg2LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
 
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
@@ -41,7 +48,10 @@
             <p style="color: var(--secondary-text-color);">Your secure personal workspace</p>
         </div>
         
-        <div id="authLoader" style="color: var(--secondary-text-color); font-size: 0.95rem;">Loading secure workspace...</div>
+        <div id="authLoader" style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+            <div class="auth-spinner"></div>
+            <span style="color: var(--secondary-text-color); font-size: 0.95rem;">Loading secure workspace...</span>
+        </div>
         
         <div id="clerkSignIn"></div>
     </div>
@@ -111,10 +121,8 @@
             const authLoader = document.getElementById('authLoader');
 
             try {
-                // Ensure Clerk script is fully initialized
                 await Clerk.load();
                 
-                // Hide loader once ready
                 if (authLoader) authLoader.style.display = 'none';
 
                 if (!Clerk.user) {
@@ -155,7 +163,7 @@
             } catch (err) {
                 console.error("Authentication failed to initialize:", err);
                 if (authLoader) {
-                    authLoader.innerHTML = '<span style="color: #ff5252;">Failed to load authentication. Please disable ad-blockers or refresh.</span>';
+                    authLoader.innerHTML = '<span style="color: #ff5252;">Failed to load authentication. Please check your connection or disable ad-blockers.</span>';
                 }
             }
         });
