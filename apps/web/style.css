@@ -429,3 +429,28 @@ dialog::backdrop {
   color: var(--secondary-text-color) !important;
   opacity: 0.7;
 }
+
+#clerkSignIn *, 
+#clerkSignIn div, 
+#clerkSignIn section {
+  box-shadow: none !important;
+}
+
+#clerkSignIn [class*="card"],
+#clerkSignIn [class*="socialButtons"],
+#clerkSignIn [class*="alternative"] {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure smooth blending for the main authentication box wrapper */
+#clerkSignIn {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#clerkSignIn > div {
+  background-color: var(--surface-color) !important;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
