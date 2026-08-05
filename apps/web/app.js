@@ -1,12 +1,24 @@
 let notes = [];
-let editingNoteId = null
+let editingNoteId = null;
 
 const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-icon lucide-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
 const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-icon lucide-moon"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>`;
 
+// Helper: Generates a unique LocalStorage key based on who is logged in via Clerk
+function getStorageKey() {
+    if (window.Clerk && window.Clerk.user) {
+        return `fluoreNotes_${window.Clerk.user.id}`;
+    }
+    return "fluoreNotes_guest";
+}
+
 function loadNotes() {
-    const savedNotes = localStorage.getItem("fluoreNotes");
-    return savedNotes ? JSON.parse(savedNotes) : []
+    const savedNotes = localStorage.getItem(getStorageKey());
+    return savedNotes ? JSON.parse(savedNotes) : [];
+}
+
+function saveNotes() {
+    localStorage.setItem(getStorageKey(), JSON.stringify(notes));
 }
 
 function saveNote(event) {
@@ -16,38 +28,32 @@ function saveNote(event) {
     const content = document.getElementById("noteContent").value.trim();
     const color = document.getElementById("noteColor").value;
 
-    if(editingNoteId) {
-        // update existing note
-
-        const noteIndex = notes.findIndex(note => note.id === editingNoteId)
-        notes[noteIndex] = {
-            ...notes[noteIndex],
-            title:title,
-            content: content,
-            color: color
+    if (editingNoteId) {
+        const noteIndex = notes.findIndex(note => note.id === editingNoteId);
+        if (noteIndex !== -1) {
+            notes[noteIndex] = {
+                ...notes[noteIndex],
+                title: title,
+                content: content,
+                color: color
+            };
         }
-    }
-
-    else {
+    } else {
         notes.unshift({
             id: generateId(),
             title: title,
             content: content,
             color: color
-        })
+        });
     }
 
-    closeNoteDialog()
+    closeNoteDialog();
     saveNotes();
-    renderNotes(); // re-renders notes so that we dont have to refresh after making a note
+    renderNotes();
 }
 
 function generateId() {
-    return Date.now().toString()
-}
-
-function saveNotes() {
-    localStorage.setItem("fluoreNotes", JSON.stringify(notes))
+    return Date.now().toString();
 }
 
 function deleteNote(noteId) {
@@ -58,8 +64,9 @@ function deleteNote(noteId) {
 
 function renderNotes(searchTerm = "") {
     const notesContainer = document.getElementById("notesContainer");
+    if (!notesContainer) return;
 
-    if(notes.length === 0) {
+    if (notes.length === 0) {
         notesContainer.innerHTML = `
         <div class="empty-state">
             <h2>Ready to plan your next step?</h2>
@@ -75,7 +82,7 @@ function renderNotes(searchTerm = "") {
         note.title.toLowerCase().includes(cleanSearch.toLowerCase())
     );
 
-    if(filteredNotes.length === 0) {
+    if (filteredNotes.length === 0) {
         const suggestedNote = notes.find(note => 
             note.title.toLowerCase().startsWith(cleanSearch.charAt(0).toLowerCase()) ||
             note.content.toLowerCase().includes(cleanSearch.toLowerCase())
@@ -112,44 +119,40 @@ function renderNotes(searchTerm = "") {
                 </button>
             </div>
         </div>
-        `).join('');
+    `).join('');
 }
 
-// note dialog code
+// Dialog controls
 function openNoteDialog(noteId = null) {
     const dialog = document.getElementById("noteDialog");
     const titleInput = document.getElementById("noteTitle");
     const contentInput = document.getElementById("noteContent");
     const colorSelect = document.getElementById("noteColor");
 
-    if(noteId) {
-        // edit note
-        const noteToEdit = notes.find(note => note.id === noteId)
-        editingNoteId = noteId
-        document.getElementById('dialogTitle').textContent = 'Edit Note'
-        titleInput.value = noteToEdit.title
-        contentInput.value = noteToEdit.content
-
+    if (noteId) {
+        const noteToEdit = notes.find(note => note.id === noteId);
+        editingNoteId = noteId;
+        document.getElementById('dialogTitle').textContent = 'Edit Note';
+        titleInput.value = noteToEdit.title;
+        contentInput.value = noteToEdit.content;
         colorSelect.value = noteToEdit.color || "";
-    }
-    else {
-        // add note
-        editingNoteId = null
-        document.getElementById('dialogTitle').textContent = 'Add New Note'
-        titleInput.value = ''
-        contentInput.value = ''
-
+    } else {
+        editingNoteId = null;
+        document.getElementById('dialogTitle').textContent = 'Add New Note';
+        titleInput.value = '';
+        contentInput.value = '';
         colorSelect.value = "";
     }
 
     dialog.showModal();
-    titleInput.focus(); // making dialog 
+    titleInput.focus();
 }
 
 function closeNoteDialog() {
     document.getElementById("noteDialog").close();
 }
 
+// Theme handling
 function ToggleTheme() {
     const isDark = document.body.classList.toggle('dark-theme');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -158,28 +161,29 @@ function ToggleTheme() {
 
 function applyStoredTheme() {
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-theme');
-        themeToggleBtn.innerHTML = sunIcon;
+        if (themeToggleBtn) themeToggleBtn.innerHTML = sunIcon;
     } else {
-        themeToggleBtn.innerHTML = moonIcon;
+        if (themeToggleBtn) themeToggleBtn.innerHTML = moonIcon;
     }
 }
 
-//* updates
+// Called by index.html once Clerk finishes loading the authenticated user
+function initNotesApp() {
+    notes = loadNotes();
+    renderNotes();
+}
+
+// Attach event listeners once DOM is ready
 document.addEventListener("DOMContentLoaded", function() {
+    applyStoredTheme();
 
-    applyStoredTheme()
-
-    notes = loadNotes() // loads notes
-    renderNotes() //* updates note rendering function
-
-    document.getElementById("noteForm").addEventListener("submit", saveNote)
-    document.getElementById('themeToggleBtn').addEventListener('click', ToggleTheme)
+    document.getElementById("noteForm").addEventListener("submit", saveNote);
+    document.getElementById('themeToggleBtn').addEventListener('click', ToggleTheme);
 
     document.getElementById("noteDialog").addEventListener("click", function(event) {
-        if(event.target === this) {    // makes sure dialog closes if clicked in whitespace
+        if (event.target === this) {
             closeNoteDialog();
         }
     });
