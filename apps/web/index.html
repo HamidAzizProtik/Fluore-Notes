@@ -125,14 +125,24 @@
                             variables: {
                                 colorPrimary: '#fd7041',       
                                 colorBackground: '#2d2520',    
-                                colorText: '#fff3f8',          
-                                colorTextSecondary: '#eec197', 
+                                colorForeground: '#fff3f8',          
+                                colorMutedForeground: '#eec197', 
+                                colorBorder: 'transparent',    
+                                colorShadow: 'transparent',    
                                 borderRadius: '0.75rem',       
                             },
                             elements: {
                                 card: {
-                                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-                                    border: '1px solid #2d2520'
+                                    backgroundColor: '#2d2520',
+                                    boxShadow: 'none',
+                                    border: 'none'
+                                },
+                                socialButtonsBlockButton: {
+                                    borderColor: '#eec197',
+                                    backgroundColor: '#1f1a17'
+                                },
+                                dividerLine: {
+                                    background: 'transparent'
                                 }
                             }
                         }
