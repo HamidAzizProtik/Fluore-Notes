@@ -454,3 +454,18 @@ dialog::backdrop {
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+/* ========================================================== */
+/* REMOVE CLERK INTERNAL CONTAINER DIVIDER BORDER             */
+/* ========================================================== */
+#clerkSignIn [class*="card"],
+#clerkSignIn [class*="socialButtonsBlock"],
+#clerkSignIn [class*="alternative"] {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#clerkSignIn > div {
+  border: none !important;
+  box-shadow: none !important;
+}
