@@ -15,7 +15,7 @@
     <script>
         Sentry.onLoad(function() {
             Sentry.init({
-            tracesSampleRate: 1.0,
+                tracesSampleRate: 1.0,
             });
         });
     </script>
@@ -24,7 +24,8 @@
         async
         crossorigin="anonymous"
         data-clerk-publishable-key="pk_test_ZmFzdC1zd2FuLTg2LmNsZXJrLmFjY291bnRzLmRldiQ"
-        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        type="text/javascript"
     ></script>
 
     <link rel="stylesheet" href="style.css">
@@ -97,10 +98,8 @@
     <script>
         window.addEventListener('load', async () => {
             try {
-                // Ensure Clerk loads UI components properly
-                await Clerk.load({
-                    standardComponents: true
-                });
+                // Initialize Clerk
+                await Clerk.load();
 
                 const authContainer = document.getElementById('authContainer');
                 const appContainer = document.getElementById('appContainer');
@@ -117,7 +116,7 @@
                     authContainer.style.display = 'none';
                     appContainer.style.display = 'block';
 
-                    // Load & Render the notes for this specific user
+                    // Load & Render notes for the current authenticated user
                     if (typeof initNotesApp === 'function') {
                         initNotesApp();
                     }
