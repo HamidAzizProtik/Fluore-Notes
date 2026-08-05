@@ -383,3 +383,49 @@ dialog::backdrop {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* ========================================================== */
+/* CLERK LOGIN CONTAINER READABILITY & CONTRAST FIXES        */
+/* ========================================================== */
+
+/* Force Clerk's root wrapper to use your exact surface/base theme variables */
+#clerkSignIn {
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  border-radius: 0.75rem;
+}
+
+/* Fix Clerk card wrapper background and text contrast */
+#clerkSignIn .cl-card,
+#clerkSignIn [class*="card"] {
+  background-color: var(--surface-color) !important;
+  color: var(--text-color) !important;
+  box-shadow: 0 4px 20px var(--shadow-color) !important;
+}
+
+/* Force headings and subtitle text inside Clerk login to match high-contrast text colors */
+#clerkSignIn h1, 
+#clerkSignIn h2, 
+#clerkSignIn h3,
+#clerkSignIn [class*="headerTitle"],
+#clerkSignIn [class*="socialButtonsBlockButtonText"] {
+  color: var(--text-color) !important;
+}
+
+#clerkSignIn p,
+#clerkSignIn span:not([class*="badge"]),
+#clerkSignIn [class*="headerSubtitle"],
+#clerkSignIn [class*="formFieldLabel"] {
+  color: var(--secondary-text-color) !important;
+}
+
+#clerkSignIn input {
+  background-color: var(--base-color) !important;
+  color: var(--text-color) !important;
+  border-color: var(--secondary-text-color) !important;
+}
+
+#clerkSignIn input::placeholder {
+  color: var(--secondary-text-color) !important;
+  opacity: 0.7;
+}
