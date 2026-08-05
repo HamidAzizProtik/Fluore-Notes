@@ -23,9 +23,8 @@
     <script
         async
         crossorigin="anonymous"
-        data-clerk-publishable-key="pk_live_Y2xlcmsuZmx1b3JlLW5vdGVzLnBhZ2VzLmRldiQ"
-        src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-        type="text/javascript"
+        data-clerk-publishable-key="pk_test_ZmFzdC1zd2FuLTg2LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
     ></script>
 
     <link rel="stylesheet" href="style.css">
@@ -33,7 +32,11 @@
 </head>
 <body class="dark-theme">
 
-    <div id="authContainer" style="display: none; min-height: 100vh; align-items: center; justify-content: center; padding: 2rem;">
+    <div id="authContainer" style="display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1.5rem;">
+        <div style="text-align: center;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-color); margin-bottom: 0.5rem;">Fluore Notes</h1>
+            <p style="color: var(--secondary-text-color);">Your secure personal workspace</p>
+        </div>
         <div id="clerkSignIn"></div>
     </div>
 
@@ -98,7 +101,6 @@
     <script>
         window.addEventListener('load', async () => {
             try {
-                // Initialize Clerk
                 await Clerk.load();
 
                 const authContainer = document.getElementById('authContainer');
@@ -108,15 +110,30 @@
                     appContainer.style.display = 'none';
                     authContainer.style.display = 'flex';
 
+                    // Mount Sign In with your custom color theme applied for free
                     Clerk.mountSignIn(document.getElementById('clerkSignIn'), {
                         afterSignInUrl: window.location.href,
-                        afterSignUpUrl: window.location.href
+                        afterSignUpUrl: window.location.href,
+                        appearance: {
+                            variables: {
+                                colorPrimary: '#fd7041',       
+                                colorBackground: '#2d2520',    
+                                colorText: '#fff3f8',          
+                                colorTextSecondary: '#eec197', 
+                                borderRadius: '0.75rem',       
+                            },
+                            elements: {
+                                card: {
+                                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+                                    border: '1px solid #2d2520'
+                                }
+                            }
+                        }
                     });
                 } else {
                     authContainer.style.display = 'none';
                     appContainer.style.display = 'block';
 
-                    // Load & Render notes for the current authenticated user
                     if (typeof initNotesApp === 'function') {
                         initNotesApp();
                     }
@@ -126,7 +143,7 @@
                     });
                 }
             } catch (err) {
-                console.error("Failed to initialize authentication:", err);
+                console.error("Authentication failed to initialize:", err);
             }
         });
     </script>
