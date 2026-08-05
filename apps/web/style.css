@@ -396,3 +396,17 @@ dialog::backdrop {
 #clerkSignIn span {
   color: var(--secondary-text-color) !important;
 }
+
+input, textarea, select {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+#clerkSignIn input {
+  display: block !important;
+  width: 100% !important;
+  min-height: 42px !important;
+  letter-spacing: normal !important;
+}
