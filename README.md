@@ -4,13 +4,13 @@
 
 > A minimalist note-taking application designed for ultimate simplicity.
 
-Fluore is a zero-friction, open-source digital notebook built for people who just want to write down their thoughts without navigating complex hierarchies, heavy databases, or cluttered user interfaces.
+Fluore is a zero-friction, open-source digital notebook built for people who just want to write down their thoughts without navigating messy menus and paywalls.
 
 ---
 
 ### What Makes Fluore Different?
 
-Most beginner note apps are bloated or fragile. **Fluore** was architectured to be lightweight, responsive, and robust out of the box without relying on heavy frontend frameworks like React or Vue.
+Combined with simple UX and blazingly fast loading times, Fluore Notes features a de-cluttered user interface with local-first note taking, allowing the user to keep data in their own hands.
 
 ---
 
