@@ -13,8 +13,9 @@
   --surface-color: #eec197;
   --text-color: #36302a;
   --secondary-text-color: #7a5c43;
-  --base-transparent-90: rgba(255, 243, 248, 0.9);
-  --base-transparent-100: rgba(255, 243, 248, 1);
+  
+  /* use them anywhere with transparency */
+  --base-rgb: 255, 243, 248; 
   --shadow-color: rgba(54, 48, 42, 0.1);
   --backdrop-color: rgba(54, 48, 42, 0.2);
 }
@@ -26,8 +27,9 @@
   --surface-color: #2d2520;
   --text-color: #fff3f8;
   --secondary-text-color: #eec197;
-  --base-transparent-90: rgba(31, 26, 23, 0.9);
-  --base-transparent-100: rgba(31, 26, 23, 1);
+  
+  /* the dark theme rgb equivalent */
+  --base-rgb: 31, 26, 23;
   --shadow-color: rgba(0, 0, 0, 0.5);
   --backdrop-color: rgba(31, 26, 23, 0.7);
 }
@@ -39,7 +41,12 @@ body {
   color: var(--text-color);
 }
 
-/* Typography & General */
+/* FOUC prevention */
+.app-container {
+  display: none;
+}
+
+/* typography & general */
 h1 {
   margin-bottom: 0;
 }
@@ -48,7 +55,13 @@ button, input, textarea, select {
   font: inherit;
 }
 
-/* Auth Layout (Replaces Inline Styles) */
+/* clear ring ONLY when someone uses the tab key */
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--brand-color);
+  outline-offset: 2px;
+}
+
+/* auth layout */
 .auth-container {
   display: flex;
   min-height: 100vh;
@@ -97,7 +110,7 @@ button, input, textarea, select {
   100% { transform: rotate(360deg); }
 }
 
-/* Application Header */
+/* application header */
 header {
   display: flex;
   justify-content: space-between;
@@ -173,7 +186,7 @@ header {
   border-color: var(--brand-color);
 }
 
-/* Notes Grid */
+/* notes grid */
 .notes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
@@ -192,6 +205,12 @@ header {
 .note-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+/* dark readable text on custom color cards even in Dark Theme */
+.note-card[style*="background-color"] .note-title,
+.note-card[style*="background-color"] .note-content {
+  color: #36302a !important;
 }
 
 .note-title {
@@ -221,9 +240,24 @@ header {
   transition: all 0.2s ease;
 }
 
-.note-card:hover .note-actions {
-  opacity: 1;
-  visibility: visible;
+/* if the device HAS a mouse, use the hover effect */
+@media (hover: hover) {
+  .note-card:hover .note-actions {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* target individual buttons instead of the container block */
+@media (hover: none) {
+  .note-actions {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .edit-btn, .delete-btn {
+    background: rgba(var(--base-rgb), 0.85);
+  }
 }
 
 .edit-btn, .delete-btn {
@@ -236,13 +270,13 @@ header {
   justify-content: center;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
-  background: var(--base-transparent-90);
+  background: rgba(var(--base-rgb), 0.9);
   color: var(--text-color);
   border: 1px solid var(--surface-color);
 }
 
 .edit-btn:hover {
-  background: var(--base-transparent-100);
+  background: rgba(var(--base-rgb), 1);
   transform: scale(1.05);
 }
 
@@ -252,7 +286,7 @@ header {
   color: #ffffff;
 }
 
-/* Dialog Styling */
+/* dialog styling */
 dialog {
   margin: auto;
   inset: 0;
@@ -344,8 +378,7 @@ dialog::backdrop {
   color: var(--text-color);
 }
 
-/* Empty State */
-
+/* empty state */
 .empty-state {
   grid-column: 1 / -1; 
   display: flex;
@@ -369,7 +402,7 @@ dialog::backdrop {
   margin-bottom: 2rem;
 }
 
-/* Scoped Clerk Overrides */
+/* scoped clerk overrides */
 #clerkSignIn {
   background-color: var(--surface-color);
   color: var(--text-color);
@@ -397,7 +430,7 @@ dialog::backdrop {
   min-height: 42px;
 }
 
-/* Mobile Breakpoints */
+/* mobile breakpoints */
 @media (max-width: 600px) {
   body {
     margin: 1rem; 
@@ -410,6 +443,7 @@ dialog::backdrop {
     gap: 0.75rem;
   }
 
+  /* restructuring the header on small screens */
   header h1 {
     order: 1;
     font-size: 1.5rem;
