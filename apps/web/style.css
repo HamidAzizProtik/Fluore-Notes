@@ -224,14 +224,14 @@ header {
   white-space: pre-wrap;
 }
 
-/* apply dark text to notes with custom colors */
+/* apply dark text to notes with custom colors.*/
 .note-card[style*="background-color: #"],
 .note-card[style*="background-color:#"] {
   & .note-title {
-    color: #1f1a17 !important;
+    color: #000000 !important;
   }
   & .note-content {
-    color: #36302a !important;
+    color: #000000 !important;
   }
 }
 

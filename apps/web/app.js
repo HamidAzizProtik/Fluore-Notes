@@ -178,12 +178,14 @@ function ToggleTheme() {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     document.getElementById('themeToggleBtn').innerHTML = isDark ? sunIcon : moonIcon;
 
-    // force Clerk to re-evaluate and mount the User Button with proper variables immediately
+    // re-mount the user button with BOTH variables and elements, or the
+    // popover menu goes back to being nearly invisible after a theme switch
     if (window.Clerk && window.Clerk.user) {
         window.Clerk.mountUserButton(document.getElementById('userButton'), {
             afterSignOutUrl: window.location.href,
             appearance: {
-                variables: getThemeSync()
+                variables: getThemeSync(),
+                elements: getThemeElements()
             }
         });
     }

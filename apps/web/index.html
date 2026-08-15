@@ -90,22 +90,93 @@
     </div>
 
     <script>
-        // helper function globally so it's clean and accessible
+        // core color variables shared by every Clerk component
         function getThemeSync() {
             const isDark = document.body.classList.contains('dark-theme');
             return {
                 colorPrimary: '#fd7041',
-                colorTextOnPrimaryBackground: '#1f1a17', 
+                colorTextOnPrimaryBackground: '#1f1a17', // dark text on the orange primary button
                 colorBackground: isDark ? '#2d2520' : '#fff3f8',
-                
+
                 colorText: isDark ? '#fff3f8' : '#36302a',
                 colorTextSecondary: isDark ? '#eec197' : '#7a5c43',
-                
+
                 colorInputBackground: isDark ? '#1f1a17' : '#ffffff',
                 colorInputText: isDark ? '#fff3f8' : '#36302a',
-                borderRadius: '0.75rem', 
+                borderRadius: '0.75rem',
             };
         }
+
+        // Clerk's `variables` do NOT reliably cascade to headerTitle, headerSubtitle,
+        // footer links, or the account popover menu — that's what was making all
+        // that text nearly invisible in dark mode. Force every text-bearing
+        // element explicitly instead of hoping variables trickle down.
+        function getThemeElements() {
+            const isDark = document.body.classList.contains('dark-theme');
+            const text = isDark ? '#fff3f8' : '#36302a';
+            const textSecondary = isDark ? '#eec197' : '#7a5c43';
+            const inputBg = isDark ? '#1f1a17' : '#ffffff';
+            const cardBg = isDark ? '#2d2520' : '#fff3f8';
+            const border = isDark ? '#eec197' : '#7a5c43';
+
+            return {
+                card: {
+                    backgroundColor: cardBg,
+                    boxShadow: 'none',
+                    border: 'none'
+                },
+                headerTitle: { color: text },
+                headerSubtitle: { color: textSecondary },
+
+                socialButtonsBlockButton: {
+                    borderColor: border,
+                    backgroundColor: inputBg,
+                    color: text
+                },
+                socialButtonsBlockButtonText: { color: text },
+
+                dividerLine: { background: border },
+                dividerText: { color: textSecondary },
+
+                formFieldLabel: { color: text },
+                formFieldInput: {
+                    backgroundColor: inputBg,
+                    borderColor: border,
+                    color: text
+                },
+                otpCodeFieldInput: {
+                    backgroundColor: inputBg,
+                    borderColor: border,
+                    color: text
+                },
+                formResendCodeLink: { color: '#fd7041' },
+
+                footerActionText: { color: textSecondary },
+                footerActionLink: { color: '#fd7041' },
+
+                identityPreviewText: { color: text },
+                identityPreviewEditButtonIcon: { color: '#fd7041' },
+
+                badge: { color: '#fd7041', borderColor: '#fd7041' },
+                footer: { background: 'transparent' },
+
+                // account popover (Image 3) — previously had zero styling at all
+                userButtonPopoverCard: {
+                    backgroundColor: cardBg,
+                    border: `1px solid ${border}`,
+                    boxShadow: 'none'
+                },
+                userButtonPopoverMain: { backgroundColor: cardBg },
+                userPreviewMainIdentifier: { color: text },
+                userPreviewSecondaryIdentifier: { color: textSecondary },
+                userButtonPopoverActionButtonText: { color: text },
+                userButtonPopoverActionButtonIcon: { color: textSecondary },
+                userButtonPopoverFooter: { background: 'transparent' }
+            };
+        }
+
+        // expose for app.js (ToggleTheme re-mounts the user button on theme switch)
+        window.getThemeElements = getThemeElements;
 
         window.addEventListener('load', async () => {
             const authContainer = document.getElementById('authContainer');
@@ -123,40 +194,12 @@
                     appContainer.style.display = 'none';
                     authContainer.style.display = 'flex';
 
-                    const isDark = document.body.classList.contains('dark-theme');
-
                     window.Clerk.mountSignIn(document.getElementById('clerkSignIn'), {
                         afterSignInUrl: window.location.href,
                         afterSignUpUrl: window.location.href,
                         appearance: {
                             variables: getThemeSync(),
-                            elements: {
-                                card: { 
-                                    backgroundColor: isDark ? '#2d2520' : '#fff3f8', 
-                                    boxShadow: 'none', 
-                                    border: 'none' 
-                                },
-                                socialButtonsBlockButton: { 
-                                    borderColor: isDark ? '#eec197' : '#7a5c43', 
-                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff',
-                                    color: isDark ? '#fff3f8' : '#36302a'
-                                },
-                                dividerLine: { 
-                                    background: isDark ? '#eec197' : '#7a5c43' 
-                                },
-                                // force background & borders on Email/Password inputs
-                                formFieldInput: {
-                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff', 
-                                    borderColor: isDark ? '#eec197' : '#7a5c43',
-                                    color: isDark ? '#fff3f8' : '#36302a'
-                                },
-                                // force background & borders on OTP boxes
-                                otpCodeFieldInput: {
-                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff',
-                                    borderColor: isDark ? '#eec197' : '#7a5c43',
-                                    color: isDark ? '#fff3f8' : '#36302a'
-                                }
-                            }
+                            elements: getThemeElements()
                         }
                     });
                 } else {
@@ -170,7 +213,8 @@
                     window.Clerk.mountUserButton(document.getElementById('userButton'), {
                         afterSignOutUrl: window.location.href,
                         appearance: {
-                            variables: getThemeSync()
+                            variables: getThemeSync(),
+                            elements: getThemeElements()
                         }
                     });
                 }
