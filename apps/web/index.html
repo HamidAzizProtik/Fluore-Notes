@@ -95,6 +95,7 @@
             const isDark = document.body.classList.contains('dark-theme');
             return {
                 colorPrimary: '#fd7041',
+                colorTextOnPrimaryBackground: '#1f1a17', 
                 colorBackground: isDark ? '#2d2520' : '#fff3f8',
                 
                 colorText: isDark ? '#fff3f8' : '#36302a',
@@ -143,13 +144,15 @@
                                 dividerLine: { 
                                     background: isDark ? '#eec197' : '#7a5c43' 
                                 },
-                                // force borders on Email/Password inputs
+                                // force background & borders on Email/Password inputs
                                 formFieldInput: {
+                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff', 
                                     borderColor: isDark ? '#eec197' : '#7a5c43',
                                     color: isDark ? '#fff3f8' : '#36302a'
                                 },
-                                // force borders on OTP boxes
+                                // force background & borders on OTP boxes
                                 otpCodeFieldInput: {
+                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff',
                                     borderColor: isDark ? '#eec197' : '#7a5c43',
                                     color: isDark ? '#fff3f8' : '#36302a'
                                 }

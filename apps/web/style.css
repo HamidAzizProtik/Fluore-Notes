@@ -235,11 +235,11 @@ header {
   }
 }
 
-/* cancel out the above rule if it's just the default theme colors */
-.note-card[style*="background-color: #2d2520"],
-.note-card[style*="background-color:#2d2520"],
-.note-card[style*="background-color: #eec197"],
-.note-card[style*="background-color:#eec197"] {
+/* cancel out the above rule if it's just the default theme colors (using case-insensitive 'i' flag) */
+.note-card[style*="background-color: #2d2520" i],
+.note-card[style*="background-color:#2d2520" i],
+.note-card[style*="background-color: #eec197" i],
+.note-card[style*="background-color:#eec197" i] {
   & .note-title {
     color: var(--text-color) !important;
   }

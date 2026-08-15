@@ -177,6 +177,16 @@ function ToggleTheme() {
     const isDark = document.body.classList.toggle('dark-theme');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     document.getElementById('themeToggleBtn').innerHTML = isDark ? sunIcon : moonIcon;
+
+    // force Clerk to re-evaluate and mount the User Button with proper variables immediately
+    if (window.Clerk && window.Clerk.user) {
+        window.Clerk.mountUserButton(document.getElementById('userButton'), {
+            afterSignOutUrl: window.location.href,
+            appearance: {
+                variables: getThemeSync()
+            }
+        });
+    }
 }
 
 function applyStoredTheme() {
