@@ -207,12 +207,7 @@ header {
   box-shadow: 0 4px 20px var(--shadow-color);
 }
 
-/* dark readable text on custom color cards even in Dark Theme */
-.note-card[style*="background-color"] .note-title,
-.note-card[style*="background-color"] .note-content {
-  color: #36302a !important;
-}
-
+/* Standard note card typography (Uses CSS Variables so theme toggle works) */
 .note-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -227,6 +222,17 @@ header {
   margin-bottom: 1rem;
   word-wrap: break-word;
   white-space: pre-wrap;
+}
+
+/* ONLY apply dark text if a custom preset color was EXPLICITLY chosen */
+.note-card[style*="background-color: #"],
+.note-card[style*="background-color:#"] {
+  & .note-title {
+    color: #1f1a17 !important;
+  }
+  & .note-content {
+    color: #36302a !important;
+  }
 }
 
 .note-actions {
