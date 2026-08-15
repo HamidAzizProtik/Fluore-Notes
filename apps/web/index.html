@@ -94,14 +94,14 @@
         function getThemeSync() {
             const isDark = document.body.classList.contains('dark-theme');
             return {
-                colorPrimary: '#fd7041',       
-                colorBackground: isDark ? '#2d2520' : '#fff3f8',    
-                colorForeground: isDark ? '#fff3f8' : '#36302a',          
-                colorMutedForeground: isDark ? '#eec197' : '#7a5c43', 
+                colorPrimary: '#fd7041',
+                colorBackground: isDark ? '#2d2520' : '#fff3f8',
+                
+                colorText: isDark ? '#fff3f8' : '#36302a',
+                colorTextSecondary: isDark ? '#eec197' : '#7a5c43',
+                
                 colorInputBackground: isDark ? '#1f1a17' : '#ffffff',
                 colorInputText: isDark ? '#fff3f8' : '#36302a',
-                colorBorder: isDark ? '#eec197' : '#eec197',    
-                colorShadow: 'none',    
                 borderRadius: '0.75rem', 
             };
         }
@@ -119,7 +119,6 @@
                 if (authLoader) authLoader.style.display = 'none';
 
                 if (!window.Clerk?.user) {
-                    // Show Auth
                     appContainer.style.display = 'none';
                     authContainer.style.display = 'flex';
 
@@ -143,12 +142,21 @@
                                 },
                                 dividerLine: { 
                                     background: isDark ? '#eec197' : '#7a5c43' 
+                                },
+                                // force borders on Email/Password inputs
+                                formFieldInput: {
+                                    borderColor: isDark ? '#eec197' : '#7a5c43',
+                                    color: isDark ? '#fff3f8' : '#36302a'
+                                },
+                                // force borders on OTP boxes
+                                otpCodeFieldInput: {
+                                    borderColor: isDark ? '#eec197' : '#7a5c43',
+                                    color: isDark ? '#fff3f8' : '#36302a'
                                 }
                             }
                         }
                     });
                 } else {
-                    // Show App
                     authContainer.style.display = 'none';
                     appContainer.style.display = 'block';
 
