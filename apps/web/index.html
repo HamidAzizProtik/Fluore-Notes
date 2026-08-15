@@ -90,6 +90,22 @@
     </div>
 
     <script>
+        // helper function globally so it's clean and accessible
+        function getThemeSync() {
+            const isDark = document.body.classList.contains('dark-theme');
+            return {
+                colorPrimary: '#fd7041',       
+                colorBackground: isDark ? '#2d2520' : '#fff3f8',    
+                colorForeground: isDark ? '#fff3f8' : '#36302a',          
+                colorMutedForeground: isDark ? '#eec197' : '#7a5c43', 
+                colorInputBackground: isDark ? '#1f1a17' : '#ffffff',
+                colorInputText: isDark ? '#fff3f8' : '#36302a',
+                colorBorder: isDark ? '#eec197' : '#eec197',    
+                colorShadow: 'none',    
+                borderRadius: '0.75rem', 
+            };
+        }
+
         window.addEventListener('load', async () => {
             const authContainer = document.getElementById('authContainer');
             const appContainer = document.getElementById('appContainer');
@@ -103,30 +119,36 @@
                 if (authLoader) authLoader.style.display = 'none';
 
                 if (!window.Clerk?.user) {
+                    // Show Auth
                     appContainer.style.display = 'none';
                     authContainer.style.display = 'flex';
+
+                    const isDark = document.body.classList.contains('dark-theme');
 
                     window.Clerk.mountSignIn(document.getElementById('clerkSignIn'), {
                         afterSignInUrl: window.location.href,
                         afterSignUpUrl: window.location.href,
                         appearance: {
-                            variables: {
-                                colorPrimary: '#fd7041',       
-                                colorBackground: '#2d2520',    
-                                colorForeground: '#fff3f8',          
-                                colorMutedForeground: '#eec197', 
-                                colorBorder: 'transparent',    
-                                colorShadow: 'transparent',    
-                                borderRadius: '0.75rem',       
-                            },
+                            variables: getThemeSync(),
                             elements: {
-                                card: { backgroundColor: '#2d2520', boxShadow: 'none', border: 'none' },
-                                socialButtonsBlockButton: { borderColor: '#eec197', backgroundColor: '#1f1a17' },
-                                dividerLine: { background: 'transparent' }
+                                card: { 
+                                    backgroundColor: isDark ? '#2d2520' : '#fff3f8', 
+                                    boxShadow: 'none', 
+                                    border: 'none' 
+                                },
+                                socialButtonsBlockButton: { 
+                                    borderColor: isDark ? '#eec197' : '#7a5c43', 
+                                    backgroundColor: isDark ? '#1f1a17' : '#ffffff',
+                                    color: isDark ? '#fff3f8' : '#36302a'
+                                },
+                                dividerLine: { 
+                                    background: isDark ? '#eec197' : '#7a5c43' 
+                                }
                             }
                         }
                     });
                 } else {
+                    // Show App
                     authContainer.style.display = 'none';
                     appContainer.style.display = 'block';
 
@@ -135,7 +157,10 @@
                     }
 
                     window.Clerk.mountUserButton(document.getElementById('userButton'), {
-                        afterSignOutUrl: window.location.href
+                        afterSignOutUrl: window.location.href,
+                        appearance: {
+                            variables: getThemeSync()
+                        }
                     });
                 }
             } catch (err) {

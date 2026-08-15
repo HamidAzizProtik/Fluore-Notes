@@ -415,17 +415,6 @@ dialog::backdrop {
   border-radius: 0.75rem;
 }
 
-#clerkSignIn h1, 
-#clerkSignIn h2, 
-#clerkSignIn h3 {
-  color: var(--text-color) !important;
-}
-
-#clerkSignIn p,
-#clerkSignIn span {
-  color: var(--secondary-text-color) !important;
-}
-
 #clerkSignIn input, 
 #clerkSignIn textarea, 
 #clerkSignIn select {
