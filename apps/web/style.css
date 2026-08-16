@@ -421,6 +421,35 @@ dialog::backdrop {
   margin-bottom: 2rem;
 }
 
+.dark-theme .cl-userButtonPopoverActionButtonText {
+    color: #fff3f8 !important;
+}
+
+.dark-theme .cl-userButtonPopoverActionButtonIcon {
+    color: #eec197 !important;
+}
+
+.dark-theme .cl-watermarkText {
+    color: #eec197 !important;
+}
+
+.dark-theme .cl-watermark svg {
+    fill: #eec197 !important;
+    opacity: 0.7;
+}
+
+.dark-theme .cl-formFieldInput::placeholder {
+    color: #7a5c43 !important; 
+    opacity: 1;
+}
+
+.dark-theme .cl-userPreviewMainIdentifier {
+    color: #fff3f8 !important;
+}
+.dark-theme .cl-userPreviewSecondaryIdentifier {
+    color: #eec197 !important;
+}
+
 /* scoped clerk overrides */
 #clerkSignIn {
   background-color: var(--surface-color);

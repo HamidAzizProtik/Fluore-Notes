@@ -107,10 +107,6 @@
             };
         }
 
-        // Clerk's `variables` do NOT reliably cascade to headerTitle, headerSubtitle,
-        // footer links, or the account popover menu — that's what was making all
-        // that text nearly invisible in dark mode. Force every text-bearing
-        // element explicitly instead of hoping variables trickle down.
         function getThemeElements() {
             const isDark = document.body.classList.contains('dark-theme');
             const text = isDark ? '#fff3f8' : '#36302a';
@@ -169,6 +165,10 @@
                 userButtonPopoverMain: { backgroundColor: cardBg },
                 userPreviewMainIdentifier: { color: text },
                 userPreviewSecondaryIdentifier: { color: textSecondary },
+                userButtonPopoverActionButton: {
+                    color: text,
+                    backgroundColor: inputBg
+                },
                 userButtonPopoverActionButtonText: { color: text },
                 userButtonPopoverActionButtonIcon: { color: textSecondary },
                 userButtonPopoverFooter: { background: 'transparent' }
