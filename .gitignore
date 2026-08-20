@@ -168,3 +168,5 @@ dist
 
 # Local desktop tool artifacts (not secrets, but should not be tracked)
 .freebuff/
+
+TODO.md
