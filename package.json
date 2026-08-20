@@ -1,0 +1,27 @@
+{
+  "name": "fluore-notes",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "db:create": "wrangler d1 create fluore-notes",
+    "db:migrate:local": "wrangler d1 migrations apply fluore-notes --local",
+    "db:migrate:remote": "wrangler d1 migrations apply fluore-notes --remote"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.21.0",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.124.0"
+  },
+  "dependencies": {
+    "jose": "^6.2.9"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260811.1": true,
+    "workerd@1.20260815.1": true
+  }
+}

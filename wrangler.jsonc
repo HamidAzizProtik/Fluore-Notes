@@ -1,0 +1,52 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "fluore-notes",
+	"main": "src/index.js",
+	"compatibility_date": "2026-08-15",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		// Static frontend (index.html, style.css, app.js) lives in ./public
+		// and is served through the ASSETS binding from src/index.js.
+		"directory": "./public",
+		"binding": "ASSETS"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "fluore-notes",
+			"database_id": "a3bcaaf2-d5d4-4eca-99e5-44bc29c48e60",
+			"migrations_dir": "./migrations"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	/**
+	 * Clerk environment configuration.
+	 * - CLERK_JWKS_URL / CLERK_ISSUER: derived from your Clerk Frontend API
+	 *   domain (the same domain used by the publishable key in index.html).
+	 * - CLERK_PUBLISHABLE_KEY: not used server-side, but kept here so the
+	 *   whole Clerk config lives in one place. The real secret is never
+	 *   needed because we verify the session JWT with the public JWKS.
+	 *
+	 * These are non-sensitive vars. For anything truly secret, use
+	 * `wrangler secret put <NAME>` instead of `vars`.
+	 */
+	"vars": {
+		"CLERK_PUBLISHABLE_KEY": "pk_test_ZmFzdC1zd2FuLTg2LmNsZXJrLmFjY291bnRzLmRldiQ",
+		"CLERK_JWKS_URL": "https://fast-swan-86.clerk.accounts.dev/.well-known/jwks.json",
+		"CLERK_ISSUER": "https://fast-swan-86.clerk.accounts.dev"
+	}
+	/**
+	 * Smart Placement
+	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+	 */
+	// "placement": {  "mode": "smart" }
+}
