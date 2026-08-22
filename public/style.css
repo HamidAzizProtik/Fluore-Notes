@@ -225,27 +225,27 @@ header {
 }
 
 /* apply dark text to notes with custom colors.*/
-.note-card[style*="background-color: #"],
-.note-card[style*="background-color:#"] {
-  & .note-title {
-    color: #000000 !important;
-  }
-  & .note-content {
-    color: #000000 !important;
-  }
+.note-card[style*="background-color: #"] .note-title,
+.note-card[style*="background-color:#"] .note-title {
+  color: #000000 !important;
+}
+.note-card[style*="background-color: #"] .note-content,
+.note-card[style*="background-color:#"] .note-content {
+  color: #000000 !important;
 }
 
 /* cancel out the above rule if it's just the default theme colors (using case-insensitive 'i' flag) */
-.note-card[style*="background-color: #2d2520" i],
-.note-card[style*="background-color:#2d2520" i],
-.note-card[style*="background-color: #eec197" i],
-.note-card[style*="background-color:#eec197" i] {
-  & .note-title {
-    color: var(--text-color) !important;
-  }
-  & .note-content {
-    color: var(--secondary-text-color) !important;
-  }
+.note-card[style*="background-color: #2d2520" i] .note-title,
+.note-card[style*="background-color:#2d2520" i] .note-title,
+.note-card[style*="background-color: #eec197" i] .note-title,
+.note-card[style*="background-color:#eec197" i] .note-title {
+  color: var(--text-color) !important;
+}
+.note-card[style*="background-color: #2d2520" i] .note-content,
+.note-card[style*="background-color:#2d2520" i] .note-content,
+.note-card[style*="background-color: #eec197" i] .note-content,
+.note-card[style*="background-color:#eec197" i] .note-content {
+  color: var(--secondary-text-color) !important;
 }
 
 .note-actions {
