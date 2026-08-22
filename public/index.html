@@ -7,20 +7,20 @@
     <meta name="google-site-verification" content="DSH0HZp0ZJgHmGOEcTpcjYUxs8lS-x4-sncp4mgwa3U">
 
     <!-- FOUC prevention: paint the correct background + keep the app hidden
-         before style.css finishes loading. -->
+        before style.css finishes loading. -->
     <style>
-      html { background-color: #fff3f8; }
-      html.dark-theme { background-color: #1f1a17; }
-      .app-container { display: none !important; }
+        html { background-color: #fff3f8; }
+        html.dark-theme { background-color: #1f1a17; }
+        .app-container { display: none; }
     </style>
 
     <!-- Apply the saved theme before first paint to avoid a light-mode flash. -->
     <script>
-      try {
+        try {
         if (localStorage.getItem('theme') === 'dark') {
-          document.documentElement.classList.add('dark-theme');
+            document.documentElement.classList.add('dark-theme');
         }
-      } catch (e) {}
+        } catch (e) {}
     </script>
 
     <script async crossorigin="anonymous" src="https://fast-swan-86.clerk.accounts.dev/npm/@clerk/ui@latest/dist/ui.browser.js" type="text/javascript"></script>
