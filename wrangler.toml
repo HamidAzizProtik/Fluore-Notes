@@ -1,8 +1,0 @@
-name = "fluore-notes"
-pages_build_output_dir = "public"
-compatibility_date = "2024-03-20"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "fluore-notes-db"
-database_id = "33e504ef-20ca-449d-9b28-0121621a59fe"
