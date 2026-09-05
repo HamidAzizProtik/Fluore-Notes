@@ -1,0 +1,37 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/notes",
+      "mountPath": "/api",
+      "method": "DELETE",
+      "module": [
+        "api/notes.js:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/notes",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/notes.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/notes",
+      "mountPath": "/api",
+      "method": "POST",
+      "module": [
+        "api/notes.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/notes",
+      "mountPath": "/api",
+      "method": "PUT",
+      "module": [
+        "api/notes.js:onRequestPut"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}

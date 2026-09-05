@@ -63,10 +63,6 @@ async function loadNotes() {
 }
 
 // Save notes (not needed individually now since we use API)
-async function saveNotes() {
-    // Individual saves happen via API calls
-    return true;
-}
 
 // Save a note via API
 async function saveNote(event) {
@@ -115,9 +111,6 @@ async function saveNote(event) {
 }
 
 // Generate ID (kept for compatibility, though not used with API)
-function generateId() {
-    return Date.now().toString();
-}
 
 // Delete note via API
 async function deleteNote(noteId) {
