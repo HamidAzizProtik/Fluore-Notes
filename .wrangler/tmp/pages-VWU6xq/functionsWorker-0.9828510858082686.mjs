@@ -24,9 +24,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../.wrangler/tmp/bundle-TK2CI5/checked-fetch.js
+// ../.wrangler/tmp/bundle-3KfjGM/checked-fetch.js
 var require_checked_fetch = __commonJS({
-  "../.wrangler/tmp/bundle-TK2CI5/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-3KfjGM/checked-fetch.js"() {
     var urls = /* @__PURE__ */ new Set();
     function checkURL(request, init) {
       const url = request instanceof URL ? request : new URL(
@@ -56,44 +56,19 @@ var require_checked_fetch = __commonJS({
 // api/notes.js
 var import_checked_fetch = __toESM(require_checked_fetch());
 async function onRequestGet({ request, env }) {
-  const userId = request.headers.get("X-User-Id");
-  if (!userId)
-    return Response.json({ error: "missing user" }, { status: 401 });
-  const { results } = await env.fluore_notes_db.prepare("SELECT id, title, content, color, created_at FROM notes WHERE user_id = ? ORDER BY created_at DESC").bind(userId).all();
-  return Response.json({ notes: results });
+  return Response.json({ message: "GET test" });
 }
 async function onRequestPost({ request, env }) {
-  const userId = request.headers.get("X-User-Id");
-  if (!userId)
-    return Response.json({ error: "missing user" }, { status: 401 });
-  const { title, content, color } = await request.json();
-  if (!title)
-    return Response.json({ error: "title required" }, { status: 400 });
-  const result = await env.fluore_notes_db.prepare("INSERT INTO notes (user_id, title, content, color) VALUES (?, ?, ?, ?)").bind(userId, title, content ?? "", color ?? null).run();
-  return Response.json({ id: result.meta.last_row_id }, { status: 201 });
+  return Response.json({ message: "POST test" }, { status: 201 });
 }
 async function onRequestPut({ request, env }) {
-  const userId = request.headers.get("X-User-Id");
-  if (!userId)
-    return Response.json({ error: "missing user" }, { status: 401 });
-  const { id, title, content, color } = await request.json();
-  if (!id)
-    return Response.json({ error: "id required" }, { status: 400 });
-  await env.fluore_notes_db.prepare("UPDATE notes SET title = ?, content = ?, color = ? WHERE id = ? AND user_id = ?").bind(title, content ?? "", color ?? null, id, userId).run();
-  return Response.json({ ok: true });
+  return Response.json({ message: "PUT test" });
 }
 async function onRequestDelete({ request, env }) {
-  const userId = request.headers.get("X-User-Id");
-  if (!userId)
-    return Response.json({ error: "missing user" }, { status: 401 });
-  const { id } = await request.json();
-  if (!id)
-    return Response.json({ error: "id required" }, { status: 400 });
-  await env.fluore_notes_db.prepare("DELETE FROM notes WHERE id = ? AND user_id = ?").bind(id, userId).run();
-  return Response.json({ ok: true });
+  return Response.json({ message: "DELETE test" });
 }
 
-// ../.wrangler/tmp/pages-hopOVi/functionsRoutes-0.5009464898607724.mjs
+// ../.wrangler/tmp/pages-VWU6xq/functionsRoutes-0.20154213175124525.mjs
 var routes = [
   {
     routePath: "/api/notes",
@@ -125,10 +100,10 @@ var routes = [
   }
 ];
 
-// ../.wrangler/tmp/bundle-TK2CI5/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-3KfjGM/middleware-loader.entry.ts
 var import_checked_fetch8 = __toESM(require_checked_fetch());
 
-// ../.wrangler/tmp/bundle-TK2CI5/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-3KfjGM/middleware-insertion-facade.js
 var import_checked_fetch6 = __toESM(require_checked_fetch());
 
 // ../node_modules/wrangler/templates/pages-template-worker.ts
@@ -611,7 +586,7 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-TK2CI5/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-3KfjGM/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -641,7 +616,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   ]);
 }
 
-// ../.wrangler/tmp/bundle-TK2CI5/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-3KfjGM/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -736,4 +711,4 @@ export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
   middleware_loader_entry_default as default
 };
-//# sourceMappingURL=functionsWorker-0.2472751711307486.mjs.map
+//# sourceMappingURL=functionsWorker-0.9828510858082686.mjs.map
