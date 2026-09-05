@@ -14,26 +14,61 @@ function sanitize(text) {
     return div.innerHTML;
 }
 
-// correct storage folder based on clerk authentication.
-function getStorageKey() {
+// Get user ID from Clerk for API headers
+async function getUserId() {
     if (window.Clerk && window.Clerk.user) {
-        return `fluoreNotes_${window.Clerk.user.id}`;
+        return window.Clerk.user.id;
     }
-    return "fluoreNotes_guest";
+    return null;
 }
 
-// prep for dexie.
+// API helper functions
+async function apiRequest(endpoint, options = {}) {
+    const userId = await getUserId();
+    if (!userId) {
+        throw new Error("User not authenticated");
+    }
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-User-Id': userId,
+        ...options.headers
+    };
+
+    const response = await fetch(`/api/notes${endpoint}`, {
+        ...options,
+        headers: headers
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+}
+
+// Load notes from API
 async function loadNotes() {
-    const savedNotes = localStorage.getItem(getStorageKey());
-    return savedNotes ? JSON.parse(savedNotes) : [];
+    try {
+        const response = await apiRequest('', { method: 'GET' });
+        notes = response.notes || [];
+        return notes;
+    } catch (error) {
+        console.error("Failed to load notes:", error);
+        // Fallback to empty array on error
+        notes = [];
+        return notes;
+    }
 }
 
-// we make this async so dexie can eventually save in the background.
+// Save notes (not needed individually now since we use API)
 async function saveNotes() {
-    localStorage.setItem(getStorageKey(), JSON.stringify(notes));
+    // Individual saves happen via API calls
+    return true;
 }
 
-// notice "async" here because we need to use "await" inside it.
+// Save a note via API
 async function saveNote(event) {
     event.preventDefault();
 
@@ -41,48 +76,66 @@ async function saveNote(event) {
     const content = document.getElementById("noteContent").value.trim();
     const color = document.getElementById("noteColor").value;
 
-    if (editingNoteId) {
-        const noteIndex = notes.findIndex(note => note.id === editingNoteId);
-        if (noteIndex !== -1) {
-            notes[noteIndex] = {
-                ...notes[noteIndex],
-                title: title,
-                content: content,
-                color: color
-            };
-        }
-    } else {
-        notes.unshift({
-            id: generateId(),
-            title: title,
-            content: content,
-            color: color
-        });
+    if (!title) {
+        alert("Title is required");
+        return;
     }
 
-    closeNoteDialog();
-    
-    // the await keyword acts like a pause button.
-    await saveNotes();
-    
-    // now we can safely paint the screen, knowing the data is secure
-    renderNotes();
+    try {
+        if (editingNoteId) {
+            // Update existing note
+            await apiRequest('', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    id: editingNoteId,
+                    title: title,
+                    content: content,
+                    color: color
+                })
+            });
+        } else {
+            // Create new note
+            await apiRequest('', {
+                method: 'POST',
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    color: color
+                })
+            });
+        }
+
+        closeNoteDialog();
+        await loadNotes(); // Refresh notes from server
+        renderNotes();
+    } catch (error) {
+        console.error("Failed to save note:", error);
+        alert(`Failed to save note: ${error.message}`);
+    }
 }
 
+// Generate ID (kept for compatibility, though not used with API)
 function generateId() {
     return Date.now().toString();
 }
 
+// Delete note via API
 async function deleteNote(noteId) {
-    notes = notes.filter(note => note.id !== noteId);
-    
-    // pause and wait for the deletion to save to the database
-    await saveNotes();
-    
-    // update the ui
-    renderNotes();
+    try {
+        await apiRequest('', {
+            method: 'DELETE',
+            body: JSON.stringify({ id: noteId })
+        });
+        
+        await loadNotes(); // Refresh notes from server
+        renderNotes();
+    } catch (error) {
+        console.error("Failed to delete note:", error);
+        alert(`Failed to delete note: ${error.message}`);
+    }
 }
 
+// Render notes (unchanged from original)
 function renderNotes(searchTerm = "") {
     const notesContainer = document.getElementById("notesContainer");
     if (!notesContainer) return;
@@ -131,7 +184,7 @@ function renderNotes(searchTerm = "") {
             <div class="note-actions">
                 <button class="edit-btn" onclick="openNoteDialog('${sanitize(note.id)}')" title="Edit Note">
                     <svg width="16" height="16" viewBox="0 -960 960 960" fill="currentColor">
-                        <path d="M216-216h51l375-375-51-51-375 375v51Zm-72 72v-153l498-498q11-11 23.84-16 12.83-5 27-5 14.16 0 27.16 5t24 16l51 51q11 11 16 24t5 26.54q0 14.45-5.02 27.54T795-642L297-144H144Zm600-549-51-51 51 51Zm-127.95 76.95L591-642l51 51-25.95-25.05Z"/>
+                        <path d="M216-216h51l375-375-51-51-375 375v51Zm-72 72v-153l498-498q11-11 23.84-16 12.83-5 27-5 14.16 0 27.16 5t24 16q11 11 16 24t5 26.54q0 14.45-5.02 27.54T795-642L297-144H144Zm600-549-51-51 51 51Zm-127.95 76.95L591-642l51 51-25.95-25.05Z"/>
                     </svg>
                 </button>
                 <button class="delete-btn" onclick="deleteNote('${sanitize(note.id)}')" title="Delete Note">
@@ -144,6 +197,7 @@ function renderNotes(searchTerm = "") {
     `).join('');
 }
 
+// Dialog functions (unchanged from original)
 function openNoteDialog(noteId = null) {
     const dialog = document.getElementById("noteDialog");
     const titleInput = document.getElementById("noteTitle");
@@ -173,6 +227,7 @@ function closeNoteDialog() {
     document.getElementById("noteDialog").close();
 }
 
+// Theme functions (unchanged from original)
 function ToggleTheme() {
     const isDark = document.body.classList.toggle('dark-theme');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -201,12 +256,19 @@ function applyStoredTheme() {
     }
 }
 
-// it is async so it can wait for loadNotes to finish before rendering.
+// Initialize the app
 async function initNotesApp() {
-    notes = await loadNotes();
-    renderNotes();
+    try {
+        notes = await loadNotes();
+        renderNotes();
+    } catch (error) {
+        console.error("Failed to initialize notes app:", error);
+        notes = [];
+        renderNotes();
+    }
 }
 
+// DOMContentLoaded event listener (updated)
 document.addEventListener("DOMContentLoaded", function() {
     applyStoredTheme();
 
