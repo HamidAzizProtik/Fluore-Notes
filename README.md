@@ -1,3 +1,4 @@
+# DEPRECATED
 # Fluore
 
 [![Website](https://img.shields.io/badge/Website-See%20it%20for%20yourself-blue)](https://fluore.pages.dev)
